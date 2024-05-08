@@ -19,9 +19,13 @@ first, download Visual Studio Code.
 
 ### Bluetooth Sensor App (React Native)
 
+(note: this is currently only setup for Android. permissions to use BLE need to be set for iOS)
+
 follow the instructions here: https://reactnative.dev/docs/environment-setup?guide=native. Installing node through choco didn't install npm or npx for me, but installing through nvm works fine and is generally better-practice.
 
 this doesn't use expo, so follow the instructions here: https://reactnative.dev/docs/running-on-device. I got an error saying "This adb server's $ADB_VENDOR_KEYS is not set". To fix this on my phone, I turned USB debugging off and on again while plugged in to my computer.
+
+upload the app by copy-pasting `npx react-native run-android` into the terminal
 
 note: graddle version 8.5 is used as 8.6 and 8.7 give build errors (at least for windows)
 
