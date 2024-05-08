@@ -17,10 +17,11 @@ std::vector<unsigned char> intToBytes(int value) {
 }
 
 struct {
-  const char* notifyLevel = "19A3039B-6C45-4D8F-94A2-2D6052FA12F8";
-  const char* indicateLevel = "19A3039B-6C45-4D8F-94A2-2D6052FA12F9";
-  const char* batteryLevelService = "b72b95e3-4b16-4ae2-b291-cdff99fd393f";
+  const char* notifyLevel = NOTIFYVOLTAGELEVEL_UUID;
+  const char* indicateLevel = INDICATEVOLTAGELEVEL_UUID;
+  const char* voltageLevelService = VOLTAGELEVELSERVICE_UUID;
 } uuid;
+
 static NimBLEServer* pServer;
 
 class ServerCallbacks: public NimBLEServerCallbacks {
@@ -174,6 +175,7 @@ void checkButton(long currentMillis, NimBLEService* pSvc){
   if(currentMillis >= nextButtonCheckMillis){
     if(digitalRead(GPIO_NUM_5)){
       int voltageLevel = readVoltageLevel();
+      // TODO: read byte values direct from register
       std::vector<uint8_t> voltageVector = intToBytes(voltageLevel);
       Serial.print("Indicating value: ");
       Serial.println(voltageLevel);
@@ -222,7 +224,7 @@ void setup() {
     pServer = NimBLEDevice::createServer();
     pServer->setCallbacks(new ServerCallbacks());
 
-    NimBLEService* pVoltageLevelService = pServer->createService(uuid.batteryLevelService);
+    NimBLEService* pVoltageLevelService = pServer->createService(uuid.voltageLevelService);
     NimBLECharacteristic* pCurrentValueChar = pVoltageLevelService->createCharacteristic(
                                                uuid.notifyLevel,
                                                NIMBLE_PROPERTY::READ |
@@ -275,7 +277,7 @@ void loop() {
     // check the battery level every 200ms
     // while the central is connected:
     while (pServer->getConnectedCount()) {
-      NimBLEService* pSvc = pServer->getServiceByUUID(uuid.batteryLevelService);
+      NimBLEService* pSvc = pServer->getServiceByUUID(uuid.voltageLevelService);
       long currentMillis = millis();
       // if 200ms have passed, check the battery level:
       checkButton(currentMillis, pSvc);

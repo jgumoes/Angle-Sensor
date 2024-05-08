@@ -1,0 +1,17 @@
+[
+  {
+    "uuid": "19A3039B-6C45-4D8F-94A2-2D6052FA12F8",
+    "name": "Notify Voltage Level",
+    "description": "notifies the most recent voltage reading"
+  },
+  {
+    "uuid": "19A3039B-6C45-4D8F-94A2-2D6052FA12F9",
+    "name": "Indicate Voltage Level",
+    "description": "indicates the voltage when the hold button is pressed"
+  },
+  {
+    "uuid": "b72b95e3-4b16-4ae2-b291-cdff99fd393f",
+    "name": "Voltage Level Service",
+    "description": "exposes the current and hold readings of a voltage level detector"
+  }
+]

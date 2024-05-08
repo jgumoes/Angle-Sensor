@@ -147,7 +147,7 @@ const ScanDevicesScreen = () => {
   };
 
   const handleDiscoverPeripheral = (peripheral: Peripheral) => {
-    console.debug('[handleDiscoverPeripheral] new BLE peripheral=', peripheral);
+    // console.debug('[handleDiscoverPeripheral] new BLE peripheral=', peripheral);
     if (!peripheral.name) {
       peripheral.name = 'NO NAME';
     }

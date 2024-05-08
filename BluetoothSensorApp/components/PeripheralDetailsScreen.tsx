@@ -12,6 +12,7 @@ import BleManager, {
   PeripheralInfo,
 } from 'react-native-ble-manager';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {uuidToName} from '../lib/uuidToName';
 
 // Define interfaces for your peripheral's properties
 // interface Characteristic {
@@ -95,7 +96,7 @@ const RenderCharacteristic = (
   return (
     <View key={index} style={styles.characteristicContainer}>
       <Text style={styles.characteristicTitle}>
-        Characteristic: {char.characteristic}
+        Characteristic: {uuidToName(char.characteristic)}
       </Text>
       <Text style={{color: Colors.black}}>
         Properties: {Object.values(char.properties).join(', ')}
@@ -108,7 +109,7 @@ const RenderCharacteristic = (
 
 const PeripheralDetailsScreen = ({route}: PeripheralDetailsProps) => {
   const peripheralData = route.params.peripheralData;
-  console.log('peripheralData:', JSON.stringify(peripheralData, null, 2));
+  //console.log('peripheralData:', JSON.stringify(peripheralData, null, 2));
 
   // Function to render characteristics for a given service
   const RenderCharacteristicsForService = (serviceUUID: string) => {
@@ -163,7 +164,9 @@ const PeripheralDetailsScreen = ({route}: PeripheralDetailsProps) => {
       </Text>
       {peripheralData.services?.map((service, index) => (
         <View key={index} style={styles.serviceContainer}>
-          <Text style={styles.serviceTitle}>Service: {service.uuid}</Text>
+          <Text style={styles.serviceTitle}>
+            Service: {uuidToName(service.uuid)}
+          </Text>
           {RenderCharacteristicsForService(service.uuid)}
         </View>
       ))}
