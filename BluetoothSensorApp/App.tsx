@@ -124,24 +124,71 @@
 
 // export default App;
 
+import 'react-native-gesture-handler'; // this must be at the top
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import ScanDevicesScreen from './components/ScanDevicesScreen';
-import PeripheralDetailsScreen from './components/PeripheralDetailsScreen';
+// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+// import ScanDevicesScreen from './components/ScanDevicesScreen';
+// import PeripheralDetailsScreen from './components/PeripheralDetailsScreen';
+import HomeScreen, { HomeScreenName } from './components/HomeScreen';
+import DataLogScreen, { DataLogScreenName } from './components/DataLogScreen';
+import DeviceConnectionScreen, { DeviceConnectionScreenName } from './components/DeviceConnectionScreen';
+import { StyleSheet } from 'react-native';
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+// const RootStack = createNativeStackNavigator();
+
+// const DrawerNavigator = () => {
+//   return (
+//     <Drawer.Navigator>
+//       <Drawer.Screen name="Home" component={HomeScreen} />
+//       <Drawer.Screen name="Data Log" component={DataLogScreen} />
+//       <Drawer.Screen
+//         name="Device Connection"
+//         component={DeviceConnectionScreen}
+//       />
+//     </Drawer.Navigator>
+//   );
+// };
+
+// const RootStackScreen = () => {
+//   return (
+//     <NavigationContainer>
+//       <RootStack.Navigator mode="modal">
+//         <RootStack.Screen
+//           name="Main"
+//           component={DrawerNavigator}
+//           options={{headerShown: false}}
+//         />
+//         <RootStack.Screen name="HowToPlayModal" component={HowToPlayModal} />
+//       </RootStack.Navigator>
+//     </NavigationContainer>
+//   );
+// };
 
 const App = () => {
   return (
+    // <NavigationContainer>
+    //   <Drawer.Navigator>
+    //     <Drawer.Screen name="ScanDevices" component={ScanDevicesScreen} />
+    //     <Drawer.Screen
+    //       name="PeripheralDetails"
+    //       component={PeripheralDetailsScreen}
+    //     />
+    //   </Drawer.Navigator>
+    // </NavigationContainer>
+
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="ScanDevices" component={ScanDevicesScreen} />
-        <Stack.Screen
-          name="PeripheralDetails"
-          component={PeripheralDetailsScreen}
+      <Drawer.Navigator initialRouteName={HomeScreenName}>
+        <Drawer.Screen name={HomeScreenName} component={HomeScreen} />
+        <Drawer.Screen name={DataLogScreenName} component={DataLogScreen} />
+        <Drawer.Screen
+          name={DeviceConnectionScreenName}
+          component={DeviceConnectionScreen}
         />
-      </Stack.Navigator>
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };
