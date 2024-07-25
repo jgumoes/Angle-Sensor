@@ -3,6 +3,12 @@
 */
 #define CONFIG_NIMBLE_CPP_ENABLE_RETURN_CODE_TEXT
 
+
+#define voltagePin GPIO_NUM_15  // 
+#define buttonPin GPIO_NUM_5
+
+const bool waitForConnection = false;
+
 #include <NimBLEDevice.h>
 #include <vector>
 #include <cstdint>
@@ -141,8 +147,8 @@ long previousNotifyMillis = 0;  // last time the battery level was checked, in m
 long nextButtonCheckMillis = 0;  // last time the battery level was checked, in ms
 
 int readVoltageLevel(){
-  int battery = analogRead(GPIO_NUM_15);
-  return map(battery, 0, 1023, 0, 100);
+  int voltage = analogRead(voltagePin);
+  return map(voltage, 0, 1023, 0, 100);
 }
 
 void notifyVoltageLevel(NimBLEService* pSvc) {
@@ -152,7 +158,7 @@ void notifyVoltageLevel(NimBLEService* pSvc) {
   int voltageLevel = readVoltageLevel();
 
   //if (voltageLevel != oldBatteryLevel) {      // if the battery level has changed
-  Serial.print("Battery Level % is now: "); // print it
+  Serial.print("Voltage Level % is now: "); // print it
   Serial.println(voltageLevel);
   //currentValueChar.writeValue(voltageLevel);  // and update the battery level characteristic
 
@@ -173,7 +179,7 @@ const uint millisBetweenButtonReads = 100;
  */
 void checkButton(long currentMillis, NimBLEService* pSvc){
   if(currentMillis >= nextButtonCheckMillis){
-    if(digitalRead(GPIO_NUM_5)){
+    if(digitalRead(buttonPin)){
       int voltageLevel = readVoltageLevel();
       // TODO: read byte values direct from register
       std::vector<uint8_t> voltageVector = intToBytes(voltageLevel);
@@ -199,6 +205,16 @@ void indicationRecievedCallback(BLEDevice central, BLECharacteristic characteris
   Serial.println("indication recieved");
 }
 
+bool isConnected(){
+  if (waitForConnection)
+  {
+    return pServer->getConnectedCount() > 0;
+  }
+  else
+  {
+    return true;
+  }
+}
 
 void setup() {
     Serial.begin(9600);
@@ -267,7 +283,7 @@ void loop() {
   //BLEDevice central = BLE.central();
 
   // if a central is connected to the peripheral:
-  if (pServer->getConnectedCount()) {
+  if (isConnected()) {
     Serial.print("Connected to central: ");
     // print the central's BT address:
     // Serial.println(central.address());
@@ -276,7 +292,7 @@ void loop() {
 
     // check the battery level every 200ms
     // while the central is connected:
-    while (pServer->getConnectedCount()) {
+    while (isConnected()) {
       NimBLEService* pSvc = pServer->getServiceByUUID(uuid.voltageLevelService);
       long currentMillis = millis();
       // if 200ms have passed, check the battery level:
