@@ -13,6 +13,8 @@ The mcu reads the angle and constantly updates the screen. a hold button can tog
 
 # setup
 
+this project is compatible with [this demo app](https://github.com/jgumoes/web-serial-and-ble)
+
 ## environment
 
 first, download Visual Studio Code.
